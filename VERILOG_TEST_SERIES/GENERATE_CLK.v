@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 09/11/2025 12:00:55 PM
+// Create Date: 09/10/2025 04:44:27 PM
 // Design Name: 
-// Module Name: testbench
+// Module Name: GENERATE_CLK
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,20 +20,24 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module testbench();
-reg clk,reset;
-wire clk_out;
+module GENERATE_CLK(
+input clk,reset,
+output reg clk_out);
 
-GENERATE_CLK uut(.clk(clk),.reset(reset),.clk_out(clk_out));
-initial clk=0;
-always #5 clk=~clk;
-initial begin
-$monitor ("at time=0%t,clk=%b,clk_out=%b",$time,clk,clk_out);
-reset=1;#10;
-reset=0;
-#50000;
-$finish;
+localparam div=250000;
+reg [18:0]count;  
+
+always @(posedge clk)begin
+if (reset)begin
+clk_out=0;
+count=0;
+end else begin
+if(count==div-1)begin
+count<=0;
+clk_out<=~clk_out;
+end else
+count<=count+1;
 end
-
+end
 
 endmodule
