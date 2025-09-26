@@ -3,7 +3,7 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 09/10/2025 05:11:25 PM
+// Create Date: 09/10/2025 04:38:36 PM
 // Design Name: 
 // Module Name: testbench
 // Project Name: 
@@ -21,30 +21,25 @@
 
 
 module testbench();
-parameter N = 4;
-reg [N-1:0]a,b;
-reg cin;
-wire [N-1:0]sum;
-wire cout;
-RIPPLE_CARRY_ADDER #(N) dut (
-        .a(a),
-        .b(b),
-        .cin(cin),
-        .sum(sum),
-        .cout(cout)
-    );
-    initial begin
-        a=4'b0000;b=4'b0000;cin=0;
-        #10;
-        a=4'b0011;b=4'b0101;cin=0;
-        #10;
-        a=4'b0111;b=4'b0111;cin=0;
-        #10;
-        a=4'b1111;b=4'b1111;cin=0;
-        #10;
-        a=4'b1010;b=4'b0110;cin=0;
-        #10;
-$finish;
+reg A,B,C,D,E;
+wire Y;
+
+verilog_test_4 uut(.A(A),.B(B),.C(C),.D(D),.E(E),.Y(Y));
+initial begin
+        $monitor("t=%0t | A=%b B=%b C=%b D=%b E=%b | Y=%b", $time, A,B,C,D,E,Y);
+        {A,B,C,D,E} = 5'b00000;
+        #10 {A,B,C,D,E} = 5'b10101;
+        #10 {A,B,C,D,E} = 5'b11011;
+        #10 {A,B,C,D,E} = 5'b11111;
+        #10 $monitoroff;
+        #50 $monitoron;
+        #20 {A,B,C,D,E} = 5'b01010;
+        #20 {A,B,C,D,E} = 5'b11100;
+
+        #50 $finish;
+
+  
+ $finish;
+
 end
-        
 endmodule
